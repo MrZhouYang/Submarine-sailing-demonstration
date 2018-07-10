@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/pic">
+        <file>localmap.png</file>
+        <file>map1.png</file>
+        <file>worldmap.png</file>
+        <file>submarine.jpg</file>
+        <file>port.png</file>
+        <file>submarine_to_down.png</file>
+        <file>submarine_to_LD.png</file>
+        <file>submarine_to_left.png</file>
+        <file>submarine_to_LU.png</file>
+        <file>submarine_to_RD.png</file>
+        <file>submarine_to_right.png</file>
+        <file>submarine_to_RU.png</file>
+        <file>submarine_to_up.png</file>
+        <file>map2.png</file>
+        <file>start.png</file>
+        <file>stop.png</file>
+        <file>path.png</file>
+    </qresource>
+</RCC>
