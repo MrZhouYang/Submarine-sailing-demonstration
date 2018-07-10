@@ -57,11 +57,6 @@ private:
     QLabel *port3; //福冈港
     QLabel *pic_label; //潜艇
 
-    void path1to2();
-    void path2to3();
-    void path1to3();
-    void Linear_inter_1to2();
-
     coordinate_s coordinate_convert(int x,int y);//将坐标值转换为经纬度值
     coordinate_s cs; //保存经纬度值的结构体
 
@@ -80,12 +75,22 @@ private:
     int init_Widght_width; //初始的窗口宽度
     int init_Widght_height; //初始的窗口高度
 
+    void path1to2();
+    void path2to3();
+    void path1to3();
+    void Linear_inter_1to2();
+
+    //label移动到（end_x，end_y）
+    void label_moveto(int end_x,int end_y);
+    void test_move();
+
 protected:
     void mousePressEvent(QMouseEvent *event);
 
     void paintEvent(QPaintEvent *event);
 
     void resizeEvent(QResizeEvent *event);
+
 
 private slots:
     void move_label();

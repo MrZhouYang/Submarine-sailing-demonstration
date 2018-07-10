@@ -15,6 +15,9 @@ Demonstration_Widget::Demonstration_Widget(QWidget *parent) :
 
     widthscale = 1;
     heightscale = 1;
+    label_w_scale = 1;
+    label_h_scale = 1;
+
 
     init_Widght_width = this->width();
     init_Widght_height = this->height();
@@ -50,11 +53,11 @@ Demonstration_Widget::Demonstration_Widget(QWidget *parent) :
 
     //潜艇
     image_submarine.load(":/pic/submarine_to_right.png");
-    image_submarine = image_submarine.scaled(100, 62, Qt::IgnoreAspectRatio);
+    //image_submarine = image_submarine.scaled(100, 62, Qt::IgnoreAspectRatio);
     pic_label = new QLabel(this);
     pic_label->setPixmap(QPixmap::fromImage(image_submarine));
     pic_label->setScaledContents(true);
-    pic_label->resize(image_submarine.width()/2, image_submarine.height()/2);
+    pic_label->resize(image_submarine.width()/13*label_w_scale, image_submarine.height()/13*label_h_scale);
     pic_label->move(pos_x,pos_y);
 
     pathselect = 0;//初始化为未选择路径
@@ -81,7 +84,8 @@ void Demonstration_Widget::move_label()
   if(pathselect==0)
       return;
   if(pathselect==1)
-      path1to2();
+      test_move();
+      //path1to2();
       //Linear_inter_1to2();
   if(pathselect==2)
       path2to3();
@@ -313,14 +317,9 @@ void Demonstration_Widget::pathset(int path)
 
 void Demonstration_Widget::paintEvent(QPaintEvent *event)
 {
-    //QPixmap pixmap = QPixmap(":/pic/map2.png");
     QPixmap pixmap = QPixmap(":/pic/map2.png").scaled(this->size());
     QPainter painter(this);
     painter.drawPixmap(pixmap.rect(), pixmap);
-
-    //qDebug()<<"pixmap.width():"<<pixmap.width()<<"   pixmap.height():" << pixmap.height();
-    //qDebug()<<"图片原本宽度:"<<QPixmap(":/pic/map2.png").width()<<"图片原本高度:" << QPixmap(":/pic/map2.png").height();
-
 
     widthscale = (double)pixmap.width() / QPixmap(":/pic/map2.png").width() ;
     heightscale = (double)pixmap.height() / QPixmap(":/pic/map2.png").height() ;
@@ -330,7 +329,7 @@ void Demonstration_Widget::paintEvent(QPaintEvent *event)
     port1->move(972*widthscale,167*heightscale); //青岛港
     port2->move(1004*widthscale,332*heightscale); //上海港
     port3->move(1200*widthscale,265*heightscale); //福冈港
-    pic_label->resize(image_submarine.width()/2*label_w_scale, image_submarine.height()/2*label_h_scale);
+//    pic_label->resize(image_submarine.width()/10*label_w_scale, image_submarine.height()/10*label_h_scale);
     pic_label->move(pos_x*widthscale,pos_y*heightscale); //潜艇
 
 //    cs = coordinate_convert(pos_x,pos_y);
@@ -345,6 +344,8 @@ void Demonstration_Widget::resizeEvent(QResizeEvent *event)
     port1->resize( image_port.width()/2*label_w_scale, image_port.height()/2*label_h_scale );
     port2->resize( image_port.width()/2*label_w_scale, image_port.height()/2*label_h_scale );
     port3->resize( image_port.width()/2*label_w_scale, image_port.height()/2*label_h_scale );
+
+    pic_label->resize(image_submarine.width()/13*label_w_scale, image_submarine.height()/13*label_h_scale);
 }
 
 
@@ -454,4 +455,175 @@ coordinate_s Demonstration_Widget::coordinate_convert(int x, int y)
     temp_s.latitude = (double)Top_latitude - y * dy;
 
     return temp_s;
+}
+
+//label移动到（end_x，end_y）
+void Demonstration_Widget::label_moveto(int end_x, int end_y)
+{
+    if(pos_x==end_x && pos_y==end_y)
+        return;
+
+    //向右斜下方移动
+    if( pos_x<end_x &&  pos_y<end_y)
+    {
+        image_submarine.load(":/pic/submarine_to_RD.png");
+        //image_submarine = image_submarine.scaled(50, 50, Qt::IgnoreAspectRatio);
+        pic_label->setPixmap(QPixmap::fromImage(image_submarine));
+        pic_label->resize(image_submarine.width()/13 *label_w_scale, image_submarine.height()/13*label_h_scale);
+
+        if(pos_x==end_x && pos_y==end_y)
+            return;
+
+        //采用线性插值
+        int DX = abs(end_x-pos_x);
+        int DY = abs(end_y-pos_y);
+
+        if(DX>DY)
+             pos_x+=1;
+        else
+              pos_y+=1;
+
+        pic_label->move(pos_x,pos_y);
+
+    }
+
+
+    //向右斜上方移动
+    if( pos_x<end_x &&  pos_y>end_y)
+    {
+        image_submarine.load(":/pic/submarine_to_RU.png");
+        //image_submarine = image_submarine.scaled(50, 50, Qt::IgnoreAspectRatio);
+        pic_label->setPixmap(QPixmap::fromImage(image_submarine));
+        pic_label->resize(image_submarine.width()/13 *label_w_scale, image_submarine.height()/13*label_h_scale);
+
+        if(pos_x==end_x && pos_y==end_y)
+            return;
+
+         //采用线性插值
+         int DX = abs(end_x-pos_x);
+         int DY = abs(end_y-pos_y);
+
+         if(DX>DY)
+              pos_x+=1;
+         else
+              pos_y-=1;
+
+         pic_label->move(pos_x,pos_y);
+    }
+
+    //向左斜上方移动
+    if( pos_x>end_x &&  pos_y>end_y)
+    {
+        image_submarine.load(":/pic/submarine_to_LU.png");
+        //image_submarine = image_submarine.scaled(50, 50, Qt::IgnoreAspectRatio);
+        pic_label->setPixmap(QPixmap::fromImage(image_submarine));
+        pic_label->resize(image_submarine.width()/13 *label_w_scale, image_submarine.height()/13*label_h_scale);
+
+        if(pos_x==end_x && pos_y==end_y)
+            return;
+
+         //采用线性插值
+         int DX = abs(end_x-pos_x);
+         int DY = abs(end_y-pos_y);
+
+         if(DX>DY)
+              pos_x-=1;
+         else
+              pos_y-=1;
+
+         pic_label->move(pos_x,pos_y);
+
+    }
+
+    //向左斜下方移动
+    if( pos_x>end_x &&  pos_y<end_y)
+    {
+        image_submarine.load(":/pic/submarine_to_LD.png");
+        //image_submarine = image_submarine.scaled(50, 50, Qt::IgnoreAspectRatio);
+        pic_label->setPixmap(QPixmap::fromImage(image_submarine));
+        pic_label->resize(image_submarine.width()/13 *label_w_scale, image_submarine.height()/13*label_h_scale);
+
+        if(pos_x==end_x && pos_y==end_y)
+            return;
+
+         //采用线性插值
+         int DX = abs(end_x-pos_x);
+         int DY = abs(end_y-pos_y);
+
+         if(DX>DY)
+              pos_x-=1;
+         else
+              pos_y+=1;
+
+         pic_label->move(pos_x,pos_y);
+
+    }
+
+    //向上方移动
+    if( pos_x==end_x &&  pos_y>end_y)
+    {
+        image_submarine.load(":/pic/submarine_to_up.png");
+        //image_submarine = image_submarine.scaled(43, 69, Qt::IgnoreAspectRatio);
+        pic_label->setPixmap(QPixmap::fromImage(image_submarine));
+        pic_label->resize(image_submarine.width()/13 *label_w_scale, image_submarine.height()/13*label_h_scale);
+
+        if(pos_y==end_y)
+            return;
+
+         pos_y--;
+         pic_label->move(pos_x,pos_y);
+    }
+
+    //向下方移动
+    if( pos_x==end_x &&  pos_y<end_y)
+    {
+        image_submarine.load(":/pic/submarine_to_down.png");
+        //image_submarine = image_submarine.scaled(43, 69, Qt::IgnoreAspectRatio);
+        pic_label->setPixmap(QPixmap::fromImage(image_submarine));
+        pic_label->resize(image_submarine.width()/13 *label_w_scale, image_submarine.height()/13*label_h_scale);
+
+        if(pos_y==end_y)
+            return;
+
+         pos_y++;
+         pic_label->move(pos_x,pos_y);
+
+    }
+
+    //向左移动
+    if( pos_x>end_x &&  pos_y==end_y)
+    {
+        image_submarine.load(":/pic/submarine_to_left.png");
+        //image_submarine = image_submarine.scaled(55, 34, Qt::IgnoreAspectRatio);
+        pic_label->setPixmap(QPixmap::fromImage(image_submarine));
+        pic_label->resize(image_submarine.width()/13 *label_w_scale, image_submarine.height()/13*label_h_scale);
+
+        if(pos_x==end_x)
+            return;
+
+         pos_x--;
+         pic_label->move(pos_x,pos_y);
+
+    }
+
+    //向右移动
+    if( pos_x<end_x &&  pos_y==end_y)
+    {
+        image_submarine.load(":/pic/submarine_to_right.png");
+        //image_submarine = image_submarine.scaled(55, 34, Qt::IgnoreAspectRatio);
+        pic_label->setPixmap(QPixmap::fromImage(image_submarine));
+        pic_label->resize(image_submarine.width()/13 *label_w_scale, image_submarine.height()/13*label_h_scale);
+
+        if(pos_x==end_x)
+            return;
+
+         pos_x++;
+         pic_label->move(pos_x,pos_y);
+    }
+}
+
+
+void Demonstration_Widget::test_move()
+{
+    label_moveto(0,0);
 }
