@@ -22,6 +22,16 @@ namespace Ui {
 class Demonstration_Widget;
 }
 
+#define Left_longitude 77.07
+#define Right_longitude 141.42
+#define Top_latitude 45.82
+#define Bottom_latitude 4.18
+
+struct coordinate_s{
+    double longitude;
+    double latitude;
+};
+
 class Demonstration_Widget : public QWidget
 {
     Q_OBJECT
@@ -51,6 +61,9 @@ private:
     void path2to3();
     void path1to3();
     void Linear_inter_1to2();
+
+    coordinate_s coordinate_convert(int x,int y);//将坐标值转换为经纬度值
+    coordinate_s cs; //保存经纬度值的结构体
 
     QAction* firstfaultaction;
     QAction* secondfaultaction;

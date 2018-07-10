@@ -66,6 +66,7 @@ Demonstration_Widget::Demonstration_Widget(QWidget *parent) :
     connect(ui->PB_start,SIGNAL(pressed()),this,SLOT(on_actionstart_triggered()));
     connect(ui->PB_stop,SIGNAL(pressed()),this,SLOT(on_actionstop_triggered()));
     connect(ui->PB_path,SIGNAL(pressed()),this,SLOT(on_actionpath_triggered()));
+
 }
 
 Demonstration_Widget::~Demonstration_Widget()
@@ -121,6 +122,8 @@ void Demonstration_Widget::path1to2()
         pic_label->resize(image_submarine.width()/2, image_submarine.height()/2);
 
         pic_label->move(pos_x,pos_y);
+//        cs = coordinate_convert(pos_x,pos_y);
+//        qDebug()<<"当前潜艇经度："<< cs.longitude << "纬度"<< cs.latitude;
         //qDebug()<<"当前潜艇坐标："<< "x:" << pos_x << "y:"<< pos_y;
     }
     else if(step1==1)
@@ -350,6 +353,9 @@ void Demonstration_Widget::paintEvent(QPaintEvent *event)
     port3->move(1200*widthscale,265*heightscale); //福冈港
     pic_label->resize(image_submarine.width()/2*label_w_scale, image_submarine.height()/2*label_h_scale);
     pic_label->move(pos_x*widthscale,pos_y*heightscale); //潜艇
+
+    cs = coordinate_convert(pos_x,pos_y);
+    qDebug()<<"当前潜艇经度："<< cs.longitude << "纬度"<< cs.latitude;
 }
 
 void Demonstration_Widget::resizeEvent(QResizeEvent *event)
@@ -469,4 +475,20 @@ void Demonstration_Widget::Linear_inter_1to2()
 //            pic_label->move(pos_x,pos_y);
 //        }
     }
+}
+
+//将坐标值转换为经纬度值
+coordinate_s Demonstration_Widget::coordinate_convert(int x, int y)
+{
+    this->width();
+    double dx = ((double)Right_longitude - Left_longitude)/QPixmap(":/pic/map2.png").width();
+    double dy = ((double)Top_latitude - Bottom_latitude)/QPixmap(":/pic/map2.png").height();
+
+    qDebug()<<"dx="<<dx<<"dy="<<dy<<endl;
+
+    coordinate_s temp_s;
+    temp_s.longitude = (double)Left_longitude +  x * dx;
+    temp_s.latitude = (double)Top_latitude - y * dy;
+
+    return temp_s;
 }
