@@ -84,9 +84,7 @@ void Demonstration_Widget::move_label()
   if(pathselect==0)
       return;
   if(pathselect==1)
-      test_move();
-      //path1to2();
-      //Linear_inter_1to2();
+      path1to2();
   if(pathselect==2)
       path2to3();
   if(pathselect==3)
@@ -116,44 +114,24 @@ void Demonstration_Widget::path1to2()
 {
     if(step1==0)
     {
-        if(pos_x>=1045)
+        if( label_moveto(1045,125) )
             step1=1;
-
-        pos_x+=2;
-        image_submarine.load(":/pic/submarine_to_right.png");
-        image_submarine = image_submarine.scaled(100, 62, Qt::IgnoreAspectRatio);
-        pic_label->setPixmap(QPixmap::fromImage(image_submarine));
-        pic_label->resize(image_submarine.width()/2, image_submarine.height()/2);
-
-        pic_label->move(pos_x,pos_y);
-        //qDebug()<<"当前潜艇坐标："<< "x:" << pos_x << "y:"<< pos_y;
     }
     else if(step1==1)
     {
-        if(pos_y>=332)
+        if( label_moveto(1028,261) )
             step1=2;
-
-        pos_y+=2;
-        image_submarine.load(":/pic/submarine_to_down.png");
-        image_submarine = image_submarine.scaled(62, 100, Qt::IgnoreAspectRatio);
-        pic_label->setPixmap(QPixmap::fromImage(image_submarine));
-        pic_label->resize(image_submarine.width()/2, image_submarine.height()/2);
-        pic_label->move(pos_x,pos_y);
     }
     else if(step1==2)
     {
-        if(pos_x<=1024)
+        if( label_moveto(1027,334) )
             step1=3;
-
-        pos_x-=2;
-        image_submarine.load(":/pic/submarine_to_left.png");
-        image_submarine = image_submarine.scaled(100, 62, Qt::IgnoreAspectRatio);
-        pic_label->setPixmap(QPixmap::fromImage(image_submarine));
-        pic_label->resize(image_submarine.width()/2, image_submarine.height()/2);
-
-        pic_label->move(pos_x,pos_y);
     }
-    //qDebug() << "当前潜艇坐标：" << "x:" << pos_x << "y:"<< pos_y;
+    else if(step1==3)
+    {
+        if( label_moveto(1025,334) )
+            step1=4;
+    }
 }
 
 //天津-》日本
@@ -458,10 +436,10 @@ coordinate_s Demonstration_Widget::coordinate_convert(int x, int y)
 }
 
 //label移动到（end_x，end_y）
-void Demonstration_Widget::label_moveto(int end_x, int end_y)
+bool Demonstration_Widget::label_moveto(int end_x, int end_y)
 {
     if(pos_x==end_x && pos_y==end_y)
-        return;
+        return true;
 
     //向右斜下方移动
     if( pos_x<end_x &&  pos_y<end_y)
@@ -472,16 +450,24 @@ void Demonstration_Widget::label_moveto(int end_x, int end_y)
         pic_label->resize(image_submarine.width()/13 *label_w_scale, image_submarine.height()/13*label_h_scale);
 
         if(pos_x==end_x && pos_y==end_y)
-            return;
+            return true;
 
-        //采用线性插值
-        int DX = abs(end_x-pos_x);
-        int DY = abs(end_y-pos_y);
-
-        if(DX>DY)
-             pos_x+=1;
+        if(pos_x!=end_x && pos_y!=end_y)
+        {
+            pos_x+=1;
+            pos_y+=1;
+        }
         else
-              pos_y+=1;
+        {
+            //采用线性插值
+            int DX = abs(end_x-pos_x);
+            int DY = abs(end_y-pos_y);
+
+            if(DX>DY)
+                 pos_x+=1;
+            else
+                  pos_y+=1;
+        }
 
         pic_label->move(pos_x,pos_y);
 
@@ -497,18 +483,24 @@ void Demonstration_Widget::label_moveto(int end_x, int end_y)
         pic_label->resize(image_submarine.width()/13 *label_w_scale, image_submarine.height()/13*label_h_scale);
 
         if(pos_x==end_x && pos_y==end_y)
-            return;
+            return true;
 
-         //采用线性插值
-         int DX = abs(end_x-pos_x);
-         int DY = abs(end_y-pos_y);
-
-         if(DX>DY)
-              pos_x+=1;
-         else
-              pos_y-=1;
-
-         pic_label->move(pos_x,pos_y);
+        if(pos_x!=end_x && pos_y!=end_y)
+        {
+            pos_x+=1;
+            pos_y-=1;
+        }
+        else
+        {
+            //采用线性插值
+            int DX = abs(end_x-pos_x);
+            int DY = abs(end_y-pos_y);
+            if(DX>DY)
+                 pos_x+=1;
+            else
+                 pos_y-=1;
+        }
+        pic_label->move(pos_x,pos_y);
     }
 
     //向左斜上方移动
@@ -520,19 +512,25 @@ void Demonstration_Widget::label_moveto(int end_x, int end_y)
         pic_label->resize(image_submarine.width()/13 *label_w_scale, image_submarine.height()/13*label_h_scale);
 
         if(pos_x==end_x && pos_y==end_y)
-            return;
+            return true;
 
-         //采用线性插值
-         int DX = abs(end_x-pos_x);
-         int DY = abs(end_y-pos_y);
+        if(pos_x!=end_x && pos_y!=end_y)
+        {
+            pos_x-=1;
+            pos_y-=1;
+        }
+        else
+        {
+            //采用线性插值
+            int DX = abs(end_x-pos_x);
+            int DY = abs(end_y-pos_y);
 
-         if(DX>DY)
-              pos_x-=1;
-         else
-              pos_y-=1;
-
-         pic_label->move(pos_x,pos_y);
-
+            if(DX>DY)
+                 pos_x-=1;
+            else
+                 pos_y-=1;
+        }
+        pic_label->move(pos_x,pos_y);
     }
 
     //向左斜下方移动
@@ -544,17 +542,27 @@ void Demonstration_Widget::label_moveto(int end_x, int end_y)
         pic_label->resize(image_submarine.width()/13 *label_w_scale, image_submarine.height()/13*label_h_scale);
 
         if(pos_x==end_x && pos_y==end_y)
-            return;
+            return true;
 
-         //采用线性插值
-         int DX = abs(end_x-pos_x);
-         int DY = abs(end_y-pos_y);
+        if(pos_x!=end_x && pos_y!=end_y)
+        {
+            pos_x-=1;
+            pos_y+=1;
+        }
+        else
+        {
+            //采用线性插值
+            int DX = abs(end_x-pos_x);
+            int DY = abs(end_y-pos_y);
 
-         if(DX>DY)
-              pos_x-=1;
-         else
-              pos_y+=1;
+            if(DX>DY)
+                 pos_x-=1;
+            else
+                 pos_y+=1;
+        }
 
+
+         //qDebug()<<"左下方移动 当前坐标"<<pos_x<<","<<pos_y;
          pic_label->move(pos_x,pos_y);
 
     }
@@ -568,7 +576,7 @@ void Demonstration_Widget::label_moveto(int end_x, int end_y)
         pic_label->resize(image_submarine.width()/13 *label_w_scale, image_submarine.height()/13*label_h_scale);
 
         if(pos_y==end_y)
-            return;
+            return true;
 
          pos_y--;
          pic_label->move(pos_x,pos_y);
@@ -583,7 +591,7 @@ void Demonstration_Widget::label_moveto(int end_x, int end_y)
         pic_label->resize(image_submarine.width()/13 *label_w_scale, image_submarine.height()/13*label_h_scale);
 
         if(pos_y==end_y)
-            return;
+            return true;
 
          pos_y++;
          pic_label->move(pos_x,pos_y);
@@ -594,12 +602,11 @@ void Demonstration_Widget::label_moveto(int end_x, int end_y)
     if( pos_x>end_x &&  pos_y==end_y)
     {
         image_submarine.load(":/pic/submarine_to_left.png");
-        //image_submarine = image_submarine.scaled(55, 34, Qt::IgnoreAspectRatio);
         pic_label->setPixmap(QPixmap::fromImage(image_submarine));
         pic_label->resize(image_submarine.width()/13 *label_w_scale, image_submarine.height()/13*label_h_scale);
 
         if(pos_x==end_x)
-            return;
+            return true;
 
          pos_x--;
          pic_label->move(pos_x,pos_y);
@@ -615,15 +622,13 @@ void Demonstration_Widget::label_moveto(int end_x, int end_y)
         pic_label->resize(image_submarine.width()/13 *label_w_scale, image_submarine.height()/13*label_h_scale);
 
         if(pos_x==end_x)
-            return;
+            return true;
 
          pos_x++;
          pic_label->move(pos_x,pos_y);
     }
+
+    return false;
 }
 
 
-void Demonstration_Widget::test_move()
-{
-    label_moveto(0,0);
-}

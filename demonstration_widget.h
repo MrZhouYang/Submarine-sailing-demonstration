@@ -81,8 +81,7 @@ private:
     void Linear_inter_1to2();
 
     //label移动到（end_x，end_y）
-    void label_moveto(int end_x,int end_y);
-    void test_move();
+    bool label_moveto(int end_x,int end_y);
 
 protected:
     void mousePressEvent(QMouseEvent *event);
