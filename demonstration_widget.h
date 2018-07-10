@@ -92,14 +92,6 @@ private slots:
     void on_actionstart_triggered();
     void on_actionstop_triggered();
     void on_actionpath_triggered();
-    void on_autoaction_triggered();
-    void on_manualaction_triggered();
-    void on_datashowaction_triggered();
-
-    void on_firstfaultaction_triggered();
-    void on_secondfaultaction_triggered();
-
-
     void pathset(int path);
 
 };

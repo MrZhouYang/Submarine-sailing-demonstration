@@ -122,8 +122,6 @@ void Demonstration_Widget::path1to2()
         pic_label->resize(image_submarine.width()/2, image_submarine.height()/2);
 
         pic_label->move(pos_x,pos_y);
-//        cs = coordinate_convert(pos_x,pos_y);
-//        qDebug()<<"当前潜艇经度："<< cs.longitude << "纬度"<< cs.latitude;
         //qDebug()<<"当前潜艇坐标："<< "x:" << pos_x << "y:"<< pos_y;
     }
     else if(step1==1)
@@ -313,23 +311,6 @@ void Demonstration_Widget::pathset(int path)
 }
 
 
-//自动模式
-void Demonstration_Widget::on_autoaction_triggered()
-{
-    AutomodeDialog *auto_dialog = new AutomodeDialog();
-    auto_dialog->setModal(true);
-    auto_dialog->show();
-}
-
-//手动模式
-void Demonstration_Widget::on_manualaction_triggered()
-{
-    ManualDialog *manu_dialog = new ManualDialog();
-    manu_dialog->setModal(true);
-    manu_dialog->show();
-}
-
-
 void Demonstration_Widget::paintEvent(QPaintEvent *event)
 {
     //QPixmap pixmap = QPixmap(":/pic/map2.png");
@@ -340,8 +321,6 @@ void Demonstration_Widget::paintEvent(QPaintEvent *event)
     //qDebug()<<"pixmap.width():"<<pixmap.width()<<"   pixmap.height():" << pixmap.height();
     //qDebug()<<"图片原本宽度:"<<QPixmap(":/pic/map2.png").width()<<"图片原本高度:" << QPixmap(":/pic/map2.png").height();
 
-//    widthscale = (double)pixmap.width() / 1529.0 ;
-//    heightscale = (double)pixmap.height() / 1078.0 ;
 
     widthscale = (double)pixmap.width() / QPixmap(":/pic/map2.png").width() ;
     heightscale = (double)pixmap.height() / QPixmap(":/pic/map2.png").height() ;
@@ -354,8 +333,8 @@ void Demonstration_Widget::paintEvent(QPaintEvent *event)
     pic_label->resize(image_submarine.width()/2*label_w_scale, image_submarine.height()/2*label_h_scale);
     pic_label->move(pos_x*widthscale,pos_y*heightscale); //潜艇
 
-    cs = coordinate_convert(pos_x,pos_y);
-    qDebug()<<"当前潜艇经度："<< cs.longitude << "纬度"<< cs.latitude;
+//    cs = coordinate_convert(pos_x,pos_y);
+//    qDebug()<<"当前潜艇经度："<< cs.longitude << "纬度"<< cs.latitude;
 }
 
 void Demonstration_Widget::resizeEvent(QResizeEvent *event)
@@ -368,22 +347,6 @@ void Demonstration_Widget::resizeEvent(QResizeEvent *event)
     port3->resize( image_port.width()/2*label_w_scale, image_port.height()/2*label_h_scale );
 }
 
-void Demonstration_Widget::on_datashowaction_triggered()
-{
-    DataShowDialog *data_dialog = new DataShowDialog();
-    data_dialog->setModal(true);
-    data_dialog->show();
-}
-
-void Demonstration_Widget::on_firstfaultaction_triggered()
-{
-
-}
-
-void Demonstration_Widget::on_secondfaultaction_triggered()
-{
-
-}
 
 //使用线性插值来移动
 void Demonstration_Widget::Linear_inter_1to2()
