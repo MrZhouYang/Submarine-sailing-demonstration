@@ -27,6 +27,8 @@ class Demonstration_Widget;
 #define Top_latitude 45.82
 #define Bottom_latitude 4.18
 
+#define Fix_re 20  //潜艇图标固定缩小比例  该值越大则显示的图标越小
+
 struct coordinate_s{
     double longitude;
     double latitude;
@@ -49,7 +51,7 @@ private:
     int pos_x; //潜艇x坐标
     int pos_y; //潜艇y坐标
 
-    //选择的路线 0:未选择 1：青岛港-》上海港
+    //选择的路线 0:未选择 1：青岛港-》上海港 2：上海-》日本
     int pathselect;
 
     QLabel *port1; //青岛港
@@ -75,10 +77,9 @@ private:
     int init_Widght_width; //初始的窗口宽度
     int init_Widght_height; //初始的窗口高度
 
-    void path1to2();
-    void path2to3();
-    void path1to3();
-    void Linear_inter_1to2();
+    void path1to2(); //天津-》上海
+    void path2to3(); //上海-》日本
+    void path1to3(); //天津-》日本
 
     //label移动到（end_x，end_y）
     bool label_moveto(int end_x,int end_y);
